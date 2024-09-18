@@ -4,13 +4,22 @@ import { User, Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {}s
 
   // Создание пользователя
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({
+    await this.prisma.user.deleteMany({});
+    await this.prisma.profile.deleteMany({});
+    const user = await this.prisma.user.create({
       data,
     });
+    const profile = await this.prisma.profile.create({
+      data: {
+        bio: 'text'
+      }
+      
+    })
+    return user
   }
 
   // Поиск пользователя по email
