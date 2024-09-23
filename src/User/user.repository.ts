@@ -15,6 +15,7 @@ export class UserRepository {
     });
     const profile = await this.prisma.profile.create({
       data: {
+        userId: user.userId,
         bio: 'text'
       }
       
@@ -32,5 +33,12 @@ export class UserRepository {
   // Получение всех пользователей
   async findAllUsers(): Promise<User[]> {
     return this.prisma.user.findMany();
+  }
+
+  async deleteUserById(userId){
+    const result = await this.prisma.user.delete({
+      where: {userId: +userId}
+    })
+
   }
 }
