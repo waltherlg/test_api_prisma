@@ -25,4 +25,9 @@ export class AppController {
     return await this.userRepository.deleteUserById(userId)        
   }
 
+  @Get('test/user/:userId')
+  async getUserWithProfile(@Param('userId') userId){
+    return await this.userRepository.getUserWithProfile(userId)
+  }
+
 }

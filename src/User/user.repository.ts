@@ -35,6 +35,21 @@ export class UserRepository {
     return this.prisma.user.findMany();
   }
 
+  async getUserWithProfile(Id){
+    const userId = +Id
+    const user = await this.prisma.user.findUnique({
+      where: {userId},
+      include: {
+        Profile: {
+          select: {
+            bio: true,  // Указываем конкретное поле, которое нужно вернуть
+          },
+        },
+      },
+    })
+    return user
+  }
+
   async deleteUserById(userId){
     const result = await this.prisma.user.delete({
       where: {userId: +userId}
