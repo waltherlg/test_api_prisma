@@ -8,22 +8,21 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly userService: UserService,
-    private readonly userRepository: UserRepository) { }
+    private readonly userRepository: UserRepository,
+  ) {}
 
   @Get()
   getHello(): string {
-
     return this.appService.getHello();
   }
 
   @Post('test/create_and_get_user')
   async create_and_get_user() {
-    return await this.userService.createUser()
+    return await this.userService.createUser();
   }
 
   @Delete('test/user/:userId')
   async deleteUser(@Param('userId') userId) {
-    return await this.userRepository.deleteUserById(userId)
+    return await this.userRepository.deleteUserById(userId);
   }
-
 }

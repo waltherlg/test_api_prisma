@@ -6,7 +6,5 @@ export class AppService {
     return 'Hello World!';
   }
 
-  createUser(){
-    
-  }
+  createUser() {}
 }

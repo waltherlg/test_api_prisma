@@ -4,7 +4,8 @@ import { User, Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserRepository {
-  constructor(private prisma: PrismaService) {}s
+  constructor(private prisma: PrismaService) {}
+  ;
 
   // Создание пользователя
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
@@ -16,11 +17,10 @@ export class UserRepository {
     const profile = await this.prisma.profile.create({
       data: {
         userId: user.userId,
-        bio: 'text'
-      }
-      
-    })
-    return user
+        bio: 'text',
+      },
+    });
+    return user;
   }
 
   // Поиск пользователя по email
@@ -35,10 +35,9 @@ export class UserRepository {
     return this.prisma.user.findMany();
   }
 
-  async deleteUserById(userId){
+  async deleteUserById(userId) {
     const result = await this.prisma.user.delete({
-      where: {userId: +userId}
-    })
-
+      where: { userId: +userId },
+    });
   }
 }
