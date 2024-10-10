@@ -6,11 +6,11 @@ import { User, Prisma } from '@prisma/client';
 export class UserRepository {
 	constructor(private prisma: PrismaService) {}
 	// Создание пользователя
-	async createUser(data: Prisma.UserCreateInput): Promise<User> {
+	async createUser(userData, profileData): Promise<User> {
 		await this.prisma.user.deleteMany({});
 		await this.prisma.profile.deleteMany({});
 		const user = await this.prisma.user.create({
-			data,
+			userData,
 		});
 		const profile = await this.prisma.profile.create({
 			data: {
