@@ -45,12 +45,17 @@ export class UserRepository {
 				},
 			},
 		});
+		console.log(user);
+
 		return user;
 	}
 
 	async deleteUserById(userId) {
-		const result = await this.prisma.user.delete({
+		const result = await this.prisma.user.deleteMany({
 			where: { userId: +userId },
 		});
+		console.log(result);
+
+		return result.count > 0;
 	}
 }
