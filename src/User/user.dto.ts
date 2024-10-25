@@ -12,9 +12,6 @@ export class CreateUserResponseDto {
 }
 
 export class CreateUserDto {
-	@ApiProperty({ example: 1 })
-	userId: number;
-
 	@ApiProperty({ example: 'john_doe' })
 	login: string;
 

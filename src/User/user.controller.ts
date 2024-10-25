@@ -70,6 +70,14 @@ export class UserController {
 		return result;
 	}
 
+	@ApiOperation({
+		summary: 'Создание пользователя',
+	})
+	@ApiResponse({
+		status: 201,
+		description: 'возват пользователя',
+		type: CreateUserResponseDto,
+	})
 	@Post()
 	async createUser(@Body() body: CreateUserDto) {
 		const result = await this.userServise.createUser(body);

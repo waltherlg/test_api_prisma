@@ -17,7 +17,7 @@ export class UserService {
 		};
 		const result = await this.userRepository.createUser(
 			userDto,
-			profileDto,
+			profileDto.bio,
 		);
 		return result;
 	}
@@ -28,7 +28,8 @@ export class UserService {
 			login,
 			email,
 		};
-		const result = await this.userRepository.createUser(userDto);
+		const bio = 'started set';
+		const result = await this.userRepository.createUser(userDto, bio);
 		return result;
 	}
 }
