@@ -25,7 +25,10 @@ export const ZodUserSchema = z
 		login: z.string().min(3, 'Login must be at least 3 characters long'),
 		email: z.string().email('Invalid email format'),
 	})
-	.strict();
+	.required();
+//.strict();
+
+type rte = (typeof ZodUserSchema)['_output'];
 
 export const createUsersShema = ZodUserSchema.omit({ userId: true }).merge(
 	ZodUserSchema.pick({ login: true, email: true }).required().partial(),

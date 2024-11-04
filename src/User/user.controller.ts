@@ -22,6 +22,7 @@ import { createZodDto } from 'nestjs-zod';
 export class createUsersShemaDto extends createZodDto(schemesApi.user.create) {}
 
 export class createUsersShemaDto2 extends createZodDto(ZodUserSchema) {}
+type rte = (typeof ZodUserSchema)['_output'];
 
 @ApiTags('User') // Категория API в Swagger
 @Controller('user')
