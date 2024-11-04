@@ -10,8 +10,18 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserRepository } from './user.repository';
-import { CreateUserDto, CreateUserResponseDto } from './user.dto';
+import {
+	CreateUserDto,
+	CreateUserResponseDto,
+	schemesApi,
+	ZodUserSchema,
+} from './user.dto';
 import { UserService } from './user.service';
+import { createZodDto } from 'nestjs-zod';
+
+export class createUsersShemaDto extends createZodDto(schemesApi.user.create) {}
+
+export class createUsersShemaDto2 extends createZodDto(ZodUserSchema) {}
 
 @ApiTags('User') // Категория API в Swagger
 @Controller('user')
@@ -79,7 +89,7 @@ export class UserController {
 		type: CreateUserResponseDto,
 	})
 	@Post()
-	async createUser(@Body() body: CreateUserDto) {
+	async createUser(@Body() body: createUsersShemaDto2) {
 		const result = await this.userServise.createUser(body);
 		return result;
 	}
