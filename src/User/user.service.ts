@@ -1,7 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { User, Prisma, Profile } from '@prisma/client';
-import { CreateUserDto } from './user.dto';
+import {
+	CreateProfileDomainDto,
+	CreateUserDto,
+	DomainProfile,
+	DomainUser,
+} from './user.dto';
 
 @Injectable()
 export class UserService {
@@ -15,10 +20,7 @@ export class UserService {
 		const profileDto: Pick<Profile, 'bio'> = {
 			bio: 'some random text',
 		};
-		const result = await this.userRepository.createUser(
-			userDto,
-			profileDto.bio,
-		);
+		const result = await this.userRepository.createUser(userDto);
 		return result;
 	}
 
@@ -29,7 +31,28 @@ export class UserService {
 			email,
 		};
 		const bio = 'started set';
-		const result = await this.userRepository.createUser(userDto, bio);
+		const result = await this.userRepository.createUser(userDto);
 		return result;
+	}
+
+	async createProfile(profileBody: CreateProfileDomainDto) {
+		const user = await this.userRepository.getUserAsEntityById(
+			profileBody.userId,
+		);
+		if (!user) {
+			const userData: CreateUserDto = {
+				login: profileBody.providerName,
+				email: profileBody.providerEmail,
+			};
+			const newUser: DomainUser =
+				await this.userRepository.createUser(userData);
+			console.log('юзер сделан из профайла', newUser);
+
+			profileBody.userId = newUser.userId;
+			const result = await this.userRepository.createProfile(profileBody);
+			return result;
+		}
+		console.log(user);
+		return user;
 	}
 }

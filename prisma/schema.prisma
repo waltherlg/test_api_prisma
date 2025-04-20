@@ -9,6 +9,8 @@ datasource db {
 
 model Profile {
   profileId Int    @id @default(autoincrement())
+  providerName String
+  providerEmail String
   bio       String
   userId    Int   @unique
   User      User  @relation(fields: [userId], references: [userId], onDelete: Cascade)

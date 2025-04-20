@@ -22,6 +22,18 @@ import { createZodDto } from 'nestjs-zod';
 export class createUsersShemaDto extends createZodDto(schemesApi.user.create) {}
 
 export class createUsersShemaDto2 extends createZodDto(ZodUserSchema) {}
+
+type userInputKostil = {
+	login: string;
+	email: string;
+};
+
+type inputProfileBody = {
+	providerName: string;
+	providerEmail: string;
+	bio: string;
+	userId: number;
+};
 type rte = (typeof ZodUserSchema)['_output'];
 
 @ApiTags('User') // Категория API в Swagger
@@ -32,23 +44,6 @@ export class UserController {
 		private readonly userServise: UserService,
 	) {}
 
-	@ApiOperation({
-		summary: 'удаляет пользователя по userId',
-	})
-	@ApiParam({
-		name: 'userId',
-		required: true,
-		description: 'ID пользователя для запроса',
-		example: '123',
-	})
-	@ApiResponse({
-		status: 204,
-		description: 'пользователь удален',
-	})
-	@ApiResponse({
-		status: 404,
-		description: 'пользователь не найден',
-	})
 	@HttpCode(204)
 	@Delete(':userId')
 	async deleteUser(@Param('userId') userId) {
@@ -56,24 +51,6 @@ export class UserController {
 		if (!result) throw new NotFoundException('user');
 	}
 
-	@ApiOperation({
-		summary: 'Запрос пользователя по айди',
-	})
-	@ApiParam({
-		name: 'userId',
-		required: true,
-		description: 'ID пользователя для запроса',
-		example: '123',
-	})
-	@ApiResponse({
-		status: 201,
-		description: 'возват пользователя',
-		type: CreateUserResponseDto,
-	})
-	@ApiResponse({
-		status: 404,
-		description: 'пользователь не найден',
-	})
 	@Get(':userId')
 	async getUserWithProfile(@Param('userId') userId) {
 		const result = await this.userRepository.getUserWithProfile(userId);
@@ -81,17 +58,23 @@ export class UserController {
 		return result;
 	}
 
-	@ApiOperation({
-		summary: 'Создание пользователя',
-	})
-	@ApiResponse({
-		status: 201,
-		description: 'возват пользователя',
-		type: CreateUserResponseDto,
-	})
+	@Get('withprofile/:userId')
+	async getUserWithProfileEnt(@Param('userId') userId) {
+		const result =
+			await this.userRepository.getUserAsEntityWithProfiel(+userId);
+		if (!result) throw new NotFoundException('user');
+		return result;
+	}
+
 	@Post()
-	async createUser(@Body() body: createUsersShemaDto2) {
+	async createUser(@Body() body: userInputKostil) {
 		const result = await this.userServise.createUser(body);
+		return result;
+	}
+
+	@Post('profile')
+	async createProfileForUser(@Body() body: inputProfileBody) {
+		const result = await this.userServise.createProfile(body);
 		return result;
 	}
 }
